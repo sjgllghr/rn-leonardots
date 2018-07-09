@@ -31,6 +31,7 @@ class FadeInView extends Component {
         position: "absolute",
         left: this.props.x,
         top: this.props.y,
+        backgroundColor: this.props.color
       }}
       >
       {this.props.children}
@@ -46,26 +47,39 @@ function negPosRandom(n) {
   return neg == 1 ? val : -1 * val;
 }
 
+function generateColor() {
+  const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple'];
+
+  return colors[Math.floor(Math.random() * colors.length)];
+}
+
 export default class Game extends Component {
     static navigationOptions = {
-      title:'Leonardots',
+      header: null,
     };
   
     constructor(props) {
       super(props);
   
-      let circles = [{x: negPosRandom(W/2), y: negPosRandom(H/2)}];
-  
       this.state = {
         index: 0,
-        circles: circles,
+        circles: [{
+          x: negPosRandom(W/2), 
+          y: negPosRandom(H/2),
+          color: generateColor()
+        }],
       }
     }
 
+    // This is kinda slow, but is it better than reseting before confirming?
     reset() {
         this.setState({
             index: 0,
-            circles: [{x: negPosRandom(W/2), y: negPosRandom(H/2)}]
+            circles: [{
+              x: negPosRandom(W/2), 
+              y: negPosRandom(H/2),
+              color: generateColor()
+            }]
         });
     }
   
@@ -88,7 +102,11 @@ export default class Game extends Component {
       } else {
         // Alert.alert('You pressed the circle ' + i);
         console.log(this);
-        this.state.circles.push({x: negPosRandom(W/2), y: negPosRandom(H/2)});
+        this.state.circles.push({
+          x: negPosRandom(W/2), 
+          y: negPosRandom(H/2),
+          color: generateColor()
+        });
         this.setState({
           index: this.state.index + 1,
           circles: this.state.circles
@@ -99,19 +117,21 @@ export default class Game extends Component {
     render() {
       console.log(this.state.circles);
   
-      let views = this.state.circles.map((coord, i) => {
-        console.log(i + " " + coord.x + " " + coord.y);
+      let views = this.state.circles.map((circle, i) => {
+        console.log(i + " " + circle.x + " " + circle.y);
+        let color = colors[Math.floor(Math.random() * colors.length)];
         return <TouchableOpacity key={i}
             onPress={this._onPressButton.bind(this, i)}>
               <FadeInView 
               style={styles.circle} 
               id={i}
-              x={coord.x}
-              y={coord.y}
+              x={circle.x}
+              y={circle.y}
+              color={circle.color}
               />
             </TouchableOpacity>
       });
-  
+      
       console.log(views);
   
       return (

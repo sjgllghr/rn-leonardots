@@ -1,18 +1,29 @@
 import React, {Component} from 'react';
-import {Button, Text, View} from 'react-native';
+import {Button, StyleSheet, View} from 'react-native';
 
 export default class Home extends Component {
     static navigationOptions = {
-        title: "Home"
+        title: "Leonardots"
     }
 
     render() {
         const { navigate } = this.props.navigation;
 
         return (
-        <Button
-            title="Play game"
-            onPress={()=> navigate('Play')}
-        />);
+        <View style={styles.container}>
+                <Button
+                    title="Play game"
+                    onPress={()=> navigate('Play')}
+                />
+        </View>);
     }
 }
+
+const styles = StyleSheet.create({
+    container: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#F5FCFF',
+    },
+});
