@@ -49,11 +49,18 @@ class FadeInView extends Component {
   }
 }
 
+function negPosRandom(n) {
+  let val = Math.random() * n;
+  let neg = Math.floor(Math.random() * 2);
+  console.log(neg);
+  return neg == 1 ? val : -1 * val;
+}
+
 export default class App extends Component<Props> {
   constructor(props) {
     super(props);
 
-    let circles = [{x: W/2 * Math.random(), y: H/2 * Math.random()}];
+    let circles = [{x: negPosRandom(W/2), y: negPosRandom(H/2)}];
 
     this.state = {
       index: 0,
@@ -64,7 +71,7 @@ export default class App extends Component<Props> {
   _onPressButton(i) {
     Alert.alert('You pressed the circle ' + i);
     console.log(this);
-    this.state.circles.push({x: W/2* Math.random(), y: H/2 * Math.random()});
+    this.state.circles.push({x: negPosRandom(W/2), y: negPosRandom(H/2)});
     this.setState({
       index: this.state.index + 1,
       circles: this.state.circles
