@@ -7,20 +7,16 @@
  */
 
 import React, {Component} from 'react';
-import {Alert, Animated, Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-
-const instructions = Platform.select({
-  ios: 'Press Cmd+R to reload,\n' + 'Cmd+D or shake for dev menu',
-  android:
-    'Double tap R on your keyboard to reload,\n' +
-    'Shake or press menu button for dev menu',
-});
+import {Alert, Animated, Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
 
 type Props = {};
+
+let {height:H, width: W} = Dimensions.get("window");
 
 class FadeInView extends Component {
   state = {
     fadeAnim: new Animated.Value(0),
+    pos: new Animated.ValueXY,
   }
 
   componentDidMount() {
@@ -38,9 +34,13 @@ class FadeInView extends Component {
 
     return (
       <Animated.View
+        id={this.props.id}
         style={{
         ...this.props.style,
         opacity: fadeAnim,
+        position: "absolute",
+        left: this.props.x,
+        top: this.props.y,
       }}
       >
       {this.props.children}
@@ -50,27 +50,48 @@ class FadeInView extends Component {
 }
 
 export default class App extends Component<Props> {
-  state = {
-    
+  constructor(props) {
+    super(props);
+
+    let circles = [{x: W/2 * Math.random(), y: H/2 * Math.random()}];
+
+    this.state = {
+      index: 0,
+      circles: circles,
+    }
   }
 
-  _onPressButton() {
-    Alert.alert('You pressed the circle');
+  _onPressButton(i) {
+    Alert.alert('You pressed the circle ' + i);
+    console.log(this);
+    this.state.circles.push({x: W/2* Math.random(), y: H/2 * Math.random()});
+    this.setState({
+      index: this.state.index + 1,
+      circles: this.state.circles
+    });
   }
 
   render() {
+    console.log(this.state.circles);
+
+    let views = this.state.circles.map((coord, i) => {
+      console.log(i + " " + coord.x + " " + coord.y);
+      return <TouchableOpacity key={i}
+          onPress={this._onPressButton.bind(this, i)}>
+            <FadeInView 
+            style={styles.circle} 
+            id={i}
+            x={coord.x}
+            y={coord.y}
+            />
+          </TouchableOpacity>
+    });
+
+    console.log(views);
+
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text style={styles.instructions}>To get started, edit App.js</Text>
-        <TouchableOpacity 
-          onPress={this._onPressButton}
-          title='Press Me'
-        >
-          <FadeInView style={styles.circle}>
-          </FadeInView>
-        </TouchableOpacity>
-        <Text style={styles.instructions}>{instructions}</Text>
+        {views}
       </View>
     );
   }
@@ -83,20 +104,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
   circle: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 50,
+    height: 50,
+    borderRadius: 25,
     backgroundColor: 'purple',
   },
 });
