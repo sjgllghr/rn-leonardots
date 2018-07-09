@@ -69,13 +69,21 @@ export default class App extends Component<Props> {
   }
 
   _onPressButton(i) {
-    Alert.alert('You pressed the circle ' + i);
-    console.log(this);
-    this.state.circles.push({x: negPosRandom(W/2), y: negPosRandom(H/2)});
-    this.setState({
-      index: this.state.index + 1,
-      circles: this.state.circles
-    });
+    if (i != this.state.index) {
+      Alert.alert("Oops!\nYou got " + this.state.index + " in a row.");
+      this.setState({
+        index: 0,
+        circles: [{x: negPosRandom(W/2), y: negPosRandom(H/2)}]
+      });
+    } else {
+      // Alert.alert('You pressed the circle ' + i);
+      console.log(this);
+      this.state.circles.push({x: negPosRandom(W/2), y: negPosRandom(H/2)});
+      this.setState({
+        index: this.state.index + 1,
+        circles: this.state.circles
+      });
+    }
   }
 
   render() {
