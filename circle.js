@@ -31,25 +31,19 @@ export default class Circle extends Component {
     }
 
     render() {
-        if (Platform.OS == 'ios') {
-          return (
-          <FadeInView 
-              size = {this.state.size} 
-              id={this.props.id}
-              x={this.state.x}
-              y={this.state.y}
-              color={this.state.color}
-          />);
-        } else {
-          return (
-            <View
-              size={this.state.size}
-              id={this.props.id}
-              x={this.state.x}
-              y={this.state.y}
-              color={this.state.color}
-            />);
-        }
+        return (
+        <FadeInView 
+            id={this.props.id}
+            style={{
+              height: this.state.size,
+              width: this.state.size,
+              borderRadius: this.state.size / 2,
+              top: this.state.y,
+              left: this.state.x,
+              backgroundColor: this.state.color,
+              position: 'absolute'
+            }}
+        />);
     }
 }
 
@@ -77,38 +71,10 @@ class FadeInView extends Component {
           style={{
           ...this.props.style,
           opacity: fadeAnim,
-          position: 'absolute',
-          left: this.props.x,
-          top: this.props.y,
-          backgroundColor: this.props.color,
-          width: this.props.size,
-          height: this.props.size,
-          borderRadius: this.props.size / 2
         }}
         >
         {this.props.children}
         </Animated.View>
       )
-    }
-}
-
-class CircleView extends Component {
-    render() {
-      console.log("circleview " + this.props.x + " " + this.props.y);
-      return <View
-        id={this.props.id}
-        style={{
-          ...this.props.style,
-          position: 'absolute',
-          left: this.props.x,
-          top: this.props.y,
-          backgroundColor: this.props.color,
-          width: this.props.size,
-          height: this.props.size,
-          borderRadius: this.props.size / 2
-        }}
-        >
-        {this.props.children}
-        </View>
     }
 }
