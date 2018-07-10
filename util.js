@@ -2,7 +2,7 @@ const MAX_SIZE = 30;
 const MIN_SIZE = 15;
 
 function randomPosition(n) {
-    let val = Math.random() * n;
+    let val = Math.random() * (n - MAX_SIZE/2);
     let neg = Math.floor(Math.random() * 2);
     console.log(neg);
     return neg == 1 ? val : -1 * val;

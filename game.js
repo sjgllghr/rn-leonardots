@@ -1,49 +1,7 @@
 import React, {Component} from 'react';
-import {Alert, Animated, Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
+import {Alert, StyleSheet, TouchableOpacity, View} from 'react-native';
 
-import {randomPosition, generateColor, randomSize} from './util';
-
-let {height:H, width: W} = Dimensions.get("window");
-
-class FadeInView extends Component {
-  state = {
-    fadeAnim: new Animated.Value(0),
-    pos: new Animated.ValueXY,
-  }
-
-  componentDidMount() {
-    Animated.timing(
-      this.state.fadeAnim,
-      {
-        toValue: 1,
-        duration: 1000,
-      }
-    ).start();
-  }
-
-  render() {
-    let { fadeAnim } = this.state;
-
-    return (
-      <Animated.View
-        id={this.props.id}
-        style={{
-        ...this.props.style,
-        opacity: fadeAnim,
-        position: "absolute",
-        left: this.props.x,
-        top: this.props.y,
-        backgroundColor: this.props.color,
-        width: this.props.size,
-        height: this.props.size,
-        borderRadius: this.props.size / 2
-      }}
-      >
-      {this.props.children}
-      </Animated.View>
-    )
-  }
-}
+import Circle from './circle';
 
 export default class Game extends Component {
     static navigationOptions = {
@@ -55,53 +13,36 @@ export default class Game extends Component {
   
       this.state = {
         index: 0,
-        circles: [{
-          x: randomPosition(W/2), 
-          y: randomPosition(H/2),
-          color: generateColor(),
-          size: randomSize()
-        }],
+        circles: [0],
       }
     }
 
-    // This is kinda slow, but is it better than reseting before confirming?
-    reset() {
+    restart() {
         this.setState({
             index: 0,
-            circles: [{
-              x: randomPosition(W/2), 
-              y: randomPosition(H/2),
-              color: generateColor(),
-              size: randomSize()
-            }]
+            circles: [0]
         });
     }
   
     _onPressButton(i) {
       if (i != this.state.index) {
+        // Clear board in background
+        this.setState({
+          circles: []
+        });
+
         const { navigate } = this.props.navigation;
 
         Alert.alert(
           "Oops!", 
           "You got " + this.state.index + " in a row.",
           [
-            {text: "Play again", onPress: () => this.reset()},
+            {text: "Play again", onPress: () => this.restart()},
             {text: "Quit", onPress: () => navigate('Home')}
           ]
         );
-        // this.setState({
-        //   index: 0,
-        //   circles: [{x: negPosRandom(W/2), y: negPosRandom(H/2)}]
-        // });
       } else {
-        // Alert.alert('You pressed the circle ' + i);
-        console.log(this);
-        this.state.circles.push({
-          x: randomPosition(W/2), 
-          y: randomPosition(H/2),
-          color: generateColor(),
-          size: randomSize()
-        });
+        this.state.circles.push(this.state.index + 1);
         this.setState({
           index: this.state.index + 1,
           circles: this.state.circles
@@ -110,24 +51,16 @@ export default class Game extends Component {
     }
   
     render() {
-      console.log(this.state.circles);
-  
-      let views = this.state.circles.map((circle, i) => {
-        console.log(i + " " + circle.x + " " + circle.y);
+      let views = this.state.circles.map((i) => {
         
-        return <TouchableOpacity key={i}
-            onPress={this._onPressButton.bind(this, i)}>
-              <FadeInView 
-              id={i}
-              x={circle.x}
-              y={circle.y}
-              color={circle.color}
-              size={circle.size}
-              />
-            </TouchableOpacity>
+      return (
+        <TouchableOpacity 
+          key={i}
+          onPress={this._onPressButton.bind(this, i)}
+        >
+          <Circle id={i} key={i}/>
+        </TouchableOpacity>)
       });
-      
-      console.log(views);
   
       return (
         <View style={styles.container}>

@@ -15,6 +15,8 @@ export default class Home extends Component {
                     title="Play game"
                     onPress={()=> navigate('Play')}
                 />
+                <Button title="Settings" />
+                <Button title="High Scores" />
         </View>);
     }
 }
