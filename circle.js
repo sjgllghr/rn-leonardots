@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {Animated, Dimensions} from 'react-native';
+import {Animated, Dimensions, Platform, View} from 'react-native';
 
-import {randomPosition, generateColor, randomSize} from './util';
+import {negPosRandom, posRandom, generateColor, randomSize} from './util';
 
 let {height:H, width: W} = Dimensions.get("window");
 
@@ -9,30 +9,53 @@ export default class Circle extends Component {
     constructor (props) {
         super(props);
 
+        let {x, y} = this.randomPosition();
+
+        console.log(x + ", " + y);
+
         this.state = {
-          x: randomPosition(W/2),
-          y: randomPosition(H/2),
+          x: x,
+          y: y,
           color: generateColor(),
           size: randomSize(),
         };
     }
 
+    randomPosition() {
+        console.log(Platform.OS);
+        if (Platform.OS == 'ios') {
+            return {x: negPosRandom(W/2), y: negPosRandom(H/2)};
+        } else {
+            return {x: posRandom(W), y: posRandom(H)};
+        }
+    }
+
     render() {
-        return (
-        <FadeInView 
-            size = {this.state.size} 
-            id={this.props.id}
-            x={this.state.x}
-            y={this.state.y}
-            color={this.state.color}
-        />);
+        if (Platform.OS == 'ios') {
+          return (
+          <FadeInView 
+              size = {this.state.size} 
+              id={this.props.id}
+              x={this.state.x}
+              y={this.state.y}
+              color={this.state.color}
+          />);
+        } else {
+          return (
+            <View
+              size={this.state.size}
+              id={this.props.id}
+              x={this.state.x}
+              y={this.state.y}
+              color={this.state.color}
+            />);
+        }
     }
 }
 
 class FadeInView extends Component {
     state = {
-      fadeAnim: new Animated.Value(0),
-      pos: new Animated.ValueXY,
+      fadeAnim: new Animated.Value(0.01),
     }
   
     componentDidMount() {
@@ -54,7 +77,7 @@ class FadeInView extends Component {
           style={{
           ...this.props.style,
           opacity: fadeAnim,
-          position: "absolute",
+          position: 'absolute',
           left: this.props.x,
           top: this.props.y,
           backgroundColor: this.props.color,
@@ -67,4 +90,25 @@ class FadeInView extends Component {
         </Animated.View>
       )
     }
-  }
+}
+
+class CircleView extends Component {
+    render() {
+      console.log("circleview " + this.props.x + " " + this.props.y);
+      return <View
+        id={this.props.id}
+        style={{
+          ...this.props.style,
+          position: 'absolute',
+          left: this.props.x,
+          top: this.props.y,
+          backgroundColor: this.props.color,
+          width: this.props.size,
+          height: this.props.size,
+          borderRadius: this.props.size / 2
+        }}
+        >
+        {this.props.children}
+        </View>
+    }
+}

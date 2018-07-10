@@ -58,13 +58,16 @@ export default class Game extends Component {
           key={i}
           onPress={this._onPressButton.bind(this, i)}
         >
-          <Circle id={i} key={i}/>
+          <Circle id={i} key={"circle" + i}/>
         </TouchableOpacity>)
       });
+
+      console.log(views);
   
       return (
         <View style={styles.container}>
           {views}
+          {/* <View style={styles.test}/> */}
         </View>
       );
     }
@@ -77,4 +80,13 @@ export default class Game extends Component {
       alignItems: 'center',
       backgroundColor: '#F5FCFF',
     },
+    // test: {
+    //   backgroundColor: 'purple',
+    //   height: 50,
+    //   width: 50,
+    //   borderRadius: 25,
+    //   top: 595.2,
+    //   left: 36.8,
+    //   position: 'absolute'
+    // }
   });

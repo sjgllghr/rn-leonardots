@@ -1,10 +1,13 @@
 const MAX_SIZE = 30;
 const MIN_SIZE = 15;
 
-function randomPosition(n) {
+function posRandom(n) {
+    return Math.random() * (n - MAX_SIZE/2);
+}
+
+function negPosRandom(n) {
     let val = Math.random() * (n - MAX_SIZE/2);
     let neg = Math.floor(Math.random() * 2);
-    console.log(neg);
     return neg == 1 ? val : -1 * val;
   }
   
@@ -18,4 +21,4 @@ function randomSize() {
     return (Math.random() * MAX_SIZE) + MIN_SIZE;
 }
 
-module.exports = {randomPosition, generateColor, randomSize};
+module.exports = {negPosRandom, posRandom, generateColor, randomSize};
