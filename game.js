@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import {Alert, Animated, Dimensions, StyleSheet, TouchableOpacity, View} from 'react-native';
 
+import {randomPosition, generateColor, randomSize} from './util';
+
 let {height:H, width: W} = Dimensions.get("window");
 
 class FadeInView extends Component {
@@ -31,26 +33,16 @@ class FadeInView extends Component {
         position: "absolute",
         left: this.props.x,
         top: this.props.y,
-        backgroundColor: this.props.color
+        backgroundColor: this.props.color,
+        width: this.props.size,
+        height: this.props.size,
+        borderRadius: this.props.size / 2
       }}
       >
       {this.props.children}
       </Animated.View>
     )
   }
-}
-
-function negPosRandom(n) {
-  let val = Math.random() * n;
-  let neg = Math.floor(Math.random() * 2);
-  console.log(neg);
-  return neg == 1 ? val : -1 * val;
-}
-
-function generateColor() {
-  const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'purple'];
-
-  return colors[Math.floor(Math.random() * colors.length)];
 }
 
 export default class Game extends Component {
@@ -64,9 +56,10 @@ export default class Game extends Component {
       this.state = {
         index: 0,
         circles: [{
-          x: negPosRandom(W/2), 
-          y: negPosRandom(H/2),
-          color: generateColor()
+          x: randomPosition(W/2), 
+          y: randomPosition(H/2),
+          color: generateColor(),
+          size: randomSize()
         }],
       }
     }
@@ -76,9 +69,10 @@ export default class Game extends Component {
         this.setState({
             index: 0,
             circles: [{
-              x: negPosRandom(W/2), 
-              y: negPosRandom(H/2),
-              color: generateColor()
+              x: randomPosition(W/2), 
+              y: randomPosition(H/2),
+              color: generateColor(),
+              size: randomSize()
             }]
         });
     }
@@ -103,9 +97,10 @@ export default class Game extends Component {
         // Alert.alert('You pressed the circle ' + i);
         console.log(this);
         this.state.circles.push({
-          x: negPosRandom(W/2), 
-          y: negPosRandom(H/2),
-          color: generateColor()
+          x: randomPosition(W/2), 
+          y: randomPosition(H/2),
+          color: generateColor(),
+          size: randomSize()
         });
         this.setState({
           index: this.state.index + 1,
@@ -119,15 +114,15 @@ export default class Game extends Component {
   
       let views = this.state.circles.map((circle, i) => {
         console.log(i + " " + circle.x + " " + circle.y);
-        let color = colors[Math.floor(Math.random() * colors.length)];
+        
         return <TouchableOpacity key={i}
             onPress={this._onPressButton.bind(this, i)}>
               <FadeInView 
-              style={styles.circle} 
               id={i}
               x={circle.x}
               y={circle.y}
               color={circle.color}
+              size={circle.size}
               />
             </TouchableOpacity>
       });
@@ -148,11 +143,5 @@ export default class Game extends Component {
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: '#F5FCFF',
-    },
-    circle: {
-      width: 50,
-      height: 50,
-      borderRadius: 25,
-      backgroundColor: 'purple',
     },
   });
