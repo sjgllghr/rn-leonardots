@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Alert, StyleSheet, TouchableOpacity, View} from 'react-native';
 
 import Circle from './circle';
+import {storeScore} from './storage';
 
 export default class Game extends Component {
     static navigationOptions = {
@@ -30,6 +31,8 @@ export default class Game extends Component {
         this.setState({
           circles: []
         });
+
+        storeScore(this.state.index, new Date());
 
         const { navigate } = this.props.navigation;
 

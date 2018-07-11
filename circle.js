@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Animated, Dimensions, Platform, View} from 'react-native';
+import {Animated, Dimensions, Platform} from 'react-native';
 
 import {negPosRandom, posRandom, generateColor, randomSize} from './util';
 
