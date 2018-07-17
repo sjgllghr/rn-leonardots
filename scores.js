@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {FlatList, Text, StyleSheet} from 'react-native';
+import {FlatList, Text, StyleSheet, View} from 'react-native';
 
 import {retrieveScores} from './storage';
 
@@ -32,7 +32,10 @@ export default class Scores extends Component {
                 data = {this.state.scores}
                 renderItem = {
                     ({item}) => (
-                    <Text> {item.score}, {new Date(item.date).toLocaleDateString()}</Text>
+                    <View style={styles.entry}>
+                    <Text style={styles.score}>{item.score}</Text>
+                    <Text>{new Date(item.date).toLocaleDateString()} at {new Date(item.date).toLocaleTimeString()}</Text>
+                    </View>
                     )
                 }
                 keyExtractor = {(item, index) => item.date}
@@ -44,11 +47,17 @@ export default class Scores extends Component {
 const styles = StyleSheet.create({
     scores: {
       flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
       backgroundColor: '#F5FCFF',
+      padding: 15,
+    },
+    score: {
+      fontSize: 20,
+      fontWeight: 'bold'
     },
     entry: {
-
+      paddingBottom: 10,
+      marginBottom: 10,
+      borderBottomWidth: 0.75,
+      borderBottomColor: 'gray'
     }
 });
