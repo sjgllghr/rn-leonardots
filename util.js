@@ -20,6 +20,7 @@ function generateColor() {
         return 'gray';
     } else {
         let colors = [];
+        
         if (global.theme == 'neon') {
             colors = NEON_COLORS;
         } else if (global.theme == 'grayscale') {

@@ -8,27 +8,14 @@ export default class Settings extends Component {
         super(props);
 
         this.state = {
-            colorsOn: true,
-            theme: 'default'
+            colorsOn: global.colorsOn,
+            theme: global.theme
         }
     }
 
     static navigationOptions = {
         title: "Settings",
     };
-
-    componentDidMount() {
-        retrieveSettings().then((results) => {
-            console.log(results);
-            let settings = JSON.parse(results);
-            this.setState({
-                colorsOn: settings.colorsOn,
-                theme: settings.theme
-            })
-        }).catch((err) => {
-            console.log(err);
-        });
-    }
 
     changeTheme(value) {
         global.theme = value;
