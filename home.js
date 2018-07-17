@@ -1,9 +1,21 @@
 import React, {Component} from 'react';
 import {Button, StyleSheet, View} from 'react-native';
 
+import {retrieveSettings} from './storage';
+
 export default class Home extends Component {
     static navigationOptions = {
         title: "Leonardots"
+    }
+
+    componentDidMount() {
+        retrieveSettings().then((results) => {
+            let settings = JSON.parse(results);
+            global.colorsOn = settings.colorsOn;
+            global.theme = settings.theme;
+        }).catch((err) => {
+            console.log(err);
+        });
     }
 
     render() {

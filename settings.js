@@ -31,12 +31,14 @@ export default class Settings extends Component {
     }
 
     changeTheme(value) {
+        global.theme = value;
         this.setState({theme: value});
         storeSettings(this.state.colorsOn, value);
         console.log(value);
     }
 
     changeColorSetting(value) {
+        global.colorsOn = value;
         this.setState({colorsOn: value});
         storeSettings(value, this.state.theme);
         console.log(value);
