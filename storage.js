@@ -1,7 +1,34 @@
 import {AsyncStorage} from 'react-native'
 
 const SCORE_KEY = "HIGHSCORES";
-const NUM_SCORES = 5;
+const NUM_SCORES = 10;
+
+const SETTINGS_KEY = "SETTINGS";
+
+async function storeSettings(colorsOn, theme) {
+    const settings = {
+        colorsOn: colorsOn,
+        theme: theme
+    };
+    try {
+        await AsyncStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+async function retrieveSettings() {
+    try {
+        let settings = await AsyncStorage.getItem(SETTINGS_KEY);
+
+        // What should be done in this case?
+        if (settings != null) {
+            return settings;
+        }
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 async function storeScore(score, date) {
     try {
@@ -44,4 +71,4 @@ async function retrieveScores() {
     }
 }
 
-module.exports = {storeScore, retrieveScores}
+module.exports = {storeScore, retrieveScores, storeSettings, retrieveSettings}
